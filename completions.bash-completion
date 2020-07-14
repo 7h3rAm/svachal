@@ -1,0 +1,3 @@
+#/usr/bin/env bash
+
+complete -W "-h --help -w --writeupdir -g --githubrepourl -s --start -f --finish -r --rebuildall -z --summarize" svachal

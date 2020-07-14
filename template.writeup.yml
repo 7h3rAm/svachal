@@ -1,0 +1,198 @@
+writeup:
+  metadata:
+    status: private
+    datetime: 20200220
+    infra: 
+    name: 
+    points: 
+    path: 
+    url: 
+    infocard: ./infocard.png
+    references:
+      - 
+    categories:
+      - oscp
+      - vulnhub/htb/thm
+      - linux/windows/bsd
+    tags:
+      - enumerate_
+      - exploit_
+      - privesc_
+  overview:
+    description: |
+      This is a writeup for <infra> VM [`<name>`](). Here's an overview of the `enumeration` → `exploitation` → `privilege escalation` process:
+    killchain:
+      - "_ [<infra>] <name>/<ipaddr>":
+        - ". Phase #1: Enumeration":
+          - ". a":
+            - ". b":
+    ttps: 
+  enumeration:
+    steps:
+      - description: |
+          Here's the Nmap scan result:
+        command: |
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+    findings:
+      openports:
+        - 
+      files:
+        - 
+      users:
+        ftp:
+          - 
+        ssh:
+          - 
+        wordpress:
+          - 
+  exploitation:
+    steps:
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+    vuln:
+      - cve: 
+        edb: 
+        links:
+          - 
+  postexploit:
+    user: 
+    hostname: 
+    id: |
+    uname: |
+    ifconfig: |
+    users:
+      - 
+  privesc:
+    steps:
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+      - description: |
+        command: |
+        screenshot:
+          - ./screenshot00.png
+    vuln:
+      - cve: 
+        edb: 
+        links:
+          -  
+  loot:
+    hashes:
+      - 
+    credentials:
+      ftp:
+        - 
+      ssh:
+        - 
+      wordpress:
+        - 
+    flags:
+      - 
+  learning:
+    - 
