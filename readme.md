@@ -1,6 +1,6 @@
 # svachal
 
-[![License: CC BY 4.0](ccby4.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![License: CC BY 4.0](https://raw.githubusercontent.com/7h3rAm/7h3rAm.github.io/master/static/files/ccby4.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a HackTheBox/VulnHub machine. Once the writeup is complete, it can be used to generate a `.md` and `.pdf` report alongwith stats and summary for all completed writeups. It works in conjuction with [machinescli](https://github.com/7h3rAm/machinescli) project so all machine metadata is natively accessible during writeup process:
 
