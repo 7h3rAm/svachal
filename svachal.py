@@ -25,7 +25,7 @@ class Svachal:
 
     self.config["basedir"] = os.path.dirname(os.path.realpath(__file__))
 
-    self.config["machinesjson"] = "%s/.machines.json" % (utils.expand_env(var="$HOME"))
+    self.config["machinesjson"] = "%s/toolbox/bootstrap/machines.json" % (utils.expand_env(var="$HOME"))
 
     self.config["metayml"] = "%s/meta.yml" % (self.config["writeupdir"])
     self.config["summaryyml"] = "%s/summary.yml" % (self.config["writeupdir"])
