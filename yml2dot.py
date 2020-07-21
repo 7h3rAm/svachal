@@ -50,7 +50,7 @@ class YML2DOT:
       "colorpallete": ["#cceabb", "#ffe0ac", "#ffacb7", "#b5cbcc", "#becddb", "#c2d6e1", "#c5d0cc", "#cddeef", "#dad4d5", "#dce1e4", "#dee9e7", "#dfdada", "#e3f2f7", "#ece1db", "#eff0ea", "#f3dbbe", "#fac3ac", "#ffcaaf"],
       "colorborder": "#665957",
       "colorlink": "#85285d",
-      "colorbg": "#f9f9f9",
+      "colorbg": "#ffffff",
       "coloredge": "#665957",
       "colornode": "#FFFFFF",
       "colorwriteuproot": "",

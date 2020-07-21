@@ -163,19 +163,19 @@ header-includes:
 {% endif %}
 
 {% if writeup.loot %}## Loot
-{% if writeup.loot.hashes|length > 0 and writeup.loot.hashes[0] != None %}### Hashes
+{% if writeup.loot.hashes and writeup.loot.hashes|length > 0 and writeup.loot.hashes[0] != None %}### Hashes
 ``` {.python .numberLines}
 {{ writeup.loot.hashes|obfuscate|join("\n") }}
 ```
 {% endif %}
-{% if writeup.loot.credentials|length > 0 and writeup.loot.hashes[0] != None %}### Credentials
+{% if writeup.loot.credentials and writeup.loot.credentials|length > 0 and writeup.loot.credentials[0] != None %}### Credentials
 ``` {.python .numberLines}
 {% for service in writeup.loot.credentials %}
 {{ service }}: {{ writeup.loot.credentials[service]|obfuscate|join(", ") }}
 {% endfor %}
 ```
 {% endif %}
-{% if writeup.loot.flags|length > 0 and writeup.loot.hashes[0] != None %}### Flags
+{% if writeup.loot.flags and writeup.loot.flags|length > 0 and writeup.loot.flags[0] != None %}### Flags
 ``` {.python .numberLines}
 {{ writeup.loot.flags|obfuscate|join("\n") }}
 ```

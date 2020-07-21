@@ -744,7 +744,7 @@ if __name__ == "__main__":
   sfgroup.add_argument('-s', '--start', required=False, action='store', help='initiate new writeup process (provide machine url)')
   sfgroup.add_argument('-m', '--manual', required=False, action='store', help='initiate new writeup process (provide infra.name)')
   sfgroup.add_argument('-f', '--finish', required=False, action='store_true', help='wrapup writeup process for $PWD writeup directory')
-  sfgroup.add_argument('-r', '--rebuildall', required=False, action='store_true', help='rebuild all writeups (recreates md/pdf/killchain)')
+  sfgroup.add_argument('-r', '--rebuildall', required=False, action='store_true', help='rebuild all writeups (recreates md/pdf/killchain/matrix)')
   sfgroup.add_argument('-z', '--summarize', required=False, action='store_true', help='update summary.yml and readme.md with data from all writeups')
   args = parser.parse_args()
 
