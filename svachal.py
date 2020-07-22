@@ -162,7 +162,7 @@ class Svachal:
     writeupyml["writeup"]["metadata"]["path"] = "misc.unknown"
     stats = search_by_key(url, self.machinesstats["machines"], key="url")
     if stats:
-      writeupyml["writeup"]["metadata"]["name"] = "'%s'" % (stats["name"])
+      writeupyml["writeup"]["metadata"]["name"] = "%s" % (stats["name"])
       writeupyml["writeup"]["metadata"]["points"] = stats["points"] if stats["points"] else None
       writeupyml["writeup"]["metadata"]["matrix"] = stats["matrix"]
       writeupyml["writeup"]["metadata"]["categories"].append(stats["os"].lower())
