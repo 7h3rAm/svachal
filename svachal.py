@@ -554,7 +554,7 @@ class Svachal:
           self.summary["ttpsitw"][port]["protokeys"] = sorted(list(set(self.summary["ttpsitw"][port]["protokeys"])), key=str.casefold)
 
       loot = []
-      if dictyml["writeup"]["loot"].get("credentials"):
+      if dictyml["writeup"].get("loot") and dictyml["writeup"]["loot"].get("credentials"):
         for credtype in dictyml["writeup"]["loot"]["credentials"]:
           for entry in dictyml["writeup"]["loot"]["credentials"][credtype]:
             try:
@@ -570,7 +570,7 @@ class Svachal:
               })
               loot.append(uniqkey)
 
-      if dictyml["writeup"]["loot"].get("hashes"):
+      if dictyml["writeup"].get("loot") and dictyml["writeup"]["loot"].get("hashes"):
         self.summary["loot"]["hashes"].extend([x for x in dictyml["writeup"]["loot"]["hashes"]])
       self.summary["loot"]["hashes"] = sorted(list(set(self.summary["loot"]["hashes"])), key=str.casefold)
 
