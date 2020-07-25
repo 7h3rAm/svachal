@@ -68,7 +68,7 @@ header-includes:
 {% endif %}
 
 {% if writeup.enumeration.findings %}### Findings
-{% if writeup.enumeration.findings.openports %}#### Open Ports:
+{% if writeup.enumeration.findings.openports %}#### Open Ports
 ``` {.python .numberLines}
 {{ writeup.enumeration.findings.openports|join("\n") }}
 {% endif %}
