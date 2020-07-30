@@ -23,10 +23,9 @@ writeup:
       This is a writeup for <infra> VM [`<name>`](). Here's an overview of the `enumeration` → `exploitation` → `privilege escalation` process:
     killchain:
       - "_ [<infra>] <name>/<ipaddr>":
-        - ". Phase #1: Enumeration":
-          - ". a":
-            - ". b":
-    ttps: 
+        - ". a":
+        - ". b":
+    ttps:
   enumeration:
     steps:
       - description: |
