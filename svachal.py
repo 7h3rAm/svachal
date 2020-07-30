@@ -370,7 +370,7 @@ class Svachal:
       dictyml["writeup"]["machine"]["ratingsurl"] = None
       dictyml["writeup"]["machine"]["matrixurl"] = None
       dictyml["writeup"]["machine"]["private"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "private" else False
-      dictyml["writeup"]["machine"]["verbose_id"] = "%s#%s" % (dictyml["writeup"]["metadata"]["infra"].lower().strip(), dictyml["writeup"]["metadata"]["name"].lower().strip())
+      dictyml["writeup"]["machine"]["verbose_id"] = "%s#%s" % (dictyml["writeup"]["metadata"]["infra"].lower().strip(), dictyml["writeup"]["metadata"]["name"].replace(" ", "").lower().strip())
       dictyml["writeup"]["machine"]["oscplike"] = True
       dictyml["writeup"]["machine"]["owned_user"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "public" else False
       dictyml["writeup"]["machine"]["owned_root"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "public" else False
