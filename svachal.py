@@ -37,6 +37,12 @@ class Svachal:
     self.config["topcount"] = 10
     self.config["ttpscsv"] = "%s/ttps.csv" % (self.config["writeupdir"])
 
+    self.infra = {
+      "HTB": "HackTheBox",
+      "THM": "TryHackMe",
+      "VH": "VulnHub",
+    }
+
     self.machinesstats = utils.load_json(self.config["machinesjson"])
 
     self.y2d = yml2dot.YML2DOT(fontsize="large", addrootnode=False, rankdirlr=False, randomnodecolor=False, savehtml=False)
@@ -163,8 +169,8 @@ class Svachal:
     stats = search_by_key(url, self.machinesstats["machines"], key="url")
     if stats:
       writeupyml["writeup"]["metadata"]["name"] = "%s" % (stats["name"])
-      writeupyml["writeup"]["metadata"]["points"] = stats["points"] if stats["points"] else None
-      writeupyml["writeup"]["metadata"]["matrix"] = stats["matrix"]
+      writeupyml["writeup"]["metadata"]["points"] = stats["points"] if stats.get("points") and stats["points"] else None
+      writeupyml["writeup"]["metadata"]["matrix"] = stats["matrix"] if stats.get("matrix") and stats["matrix"] else None
       writeupyml["writeup"]["metadata"]["categories"].append(stats["os"].lower())
       if stats["oscplike"]:
         writeupyml["writeup"]["metadata"]["categories"].append("oscp")
@@ -179,6 +185,13 @@ class Svachal:
     return writeupyml["writeup"]["metadata"]
 
   def metadata2yml(self, metadata):
+    infra = ""
+    if metadata["infra"]:
+      try:
+        infra = self.infra[metadata["infra"]]
+      except:
+        infra = metadata["infra"]
+
     formattedyml = """writeup:
   metadata:
     status: %s
@@ -209,7 +222,7 @@ class Svachal:
         "\n".join(["      - %s" % (x) for x in metadata["references"]]) if metadata["references"] else "      - ",
         "\n".join(["      - %s" % (x) for x in metadata["categories"]]) if metadata["categories"] else "      - ",
         "\n".join(["      - %s" % (x) for x in metadata["tags"]]) if metadata["tags"] else "      - ",
-        metadata["infra"] if metadata["infra"] else "",
+        infra,
         metadata["name"] if metadata["name"] else "",
         metadata["url"] if metadata["url"] else "",
       )
@@ -249,14 +262,19 @@ class Svachal:
       utils.info("writeup file '%s' created for target '%s'" % (self.config["writeupyml"], self.config["destdirname"]))
       for machine in self.machinesstats["machines"]:
         if machine["url"] == metadata["url"]:
-          utils.to_sparklines(machine["difficulty_ratings"] if machine["difficulty_ratings"] else [], filename="%s/ratings.png" % (self.config["destdirpath"]))
-          utils.info("created '%s/ratings.png' file for target '%s'" % (self.config["destdirpath"], self.config["destdirname"]))
-          url = "https://quickchart.io/chart?bkg=rgba(255,255,255,0.2)&width=270&height=200&c={ type: 'radar', data: {fill: 'False', labels: ['Enumeration', 'Real-Life', 'CVE', ['Custom', 'Exploitation'], 'CTF-Like'], datasets: [{ label: 'User rated', data: %s, backgroundColor:'rgba(154,204,20,0.2)', borderColor:'rgb(154,204,20)', pointBackgroundColor:'rgb(154,204,20)' }, { label: 'Maker rated', data: %s, backgroundColor:'rgba(86,192,224,0.2)', borderColor:'rgb(86,192,224)', pointBackgroundColor:'rgb(86,192,224)' }] }, options: { layout:{ padding:25}, plugins: { legend: false,}, scale: { angleLines: { display: true, color: 'rgb(21,23,25)' }, ticks: { callback: function() {return ''}, backdropColor: 'rgba(0, 0, 0, 0)' }, gridLines: { color: 'rgb(51,54,60)', } }, } }" % (machine["matrix"]["aggregate"], machine["matrix"]["maker"])
-          res = utils.get_http_res(url, requoteuri=True)
-          filename = "%s/matrix.png" % (self.config["destdirpath"])
-          with open(filename, "wb") as fp:
-            fp.write(res.content)
-          utils.info("created '%s/matrix.png' file for target '%s'" % (self.config["destdirpath"], self.config["destdirname"]))
+
+          if machine.get("difficulty_ratings") and machine["difficulty_ratings"]:
+            utils.to_sparklines(machine["difficulty_ratings"] if machine["difficulty_ratings"] else [], filename="%s/ratings.png" % (self.config["destdirpath"]))
+            utils.info("created '%s/ratings.png' file for target '%s'" % (self.config["destdirpath"], self.config["destdirname"]))
+
+          if machine.get("matrix") and machine["matrix"]:
+            url = "https://quickchart.io/chart?bkg=rgba(255,255,255,0.2)&width=270&height=200&c={ type: 'radar', data: {fill: 'False', labels: ['Enumeration', 'Real-Life', 'CVE', ['Custom', 'Exploitation'], 'CTF-Like'], datasets: [{ label: 'User rated', data: %s, backgroundColor:'rgba(154,204,20,0.2)', borderColor:'rgb(154,204,20)', pointBackgroundColor:'rgb(154,204,20)' }, { label: 'Maker rated', data: %s, backgroundColor:'rgba(86,192,224,0.2)', borderColor:'rgb(86,192,224)', pointBackgroundColor:'rgb(86,192,224)' }] }, options: { layout:{ padding:25}, plugins: { legend: false,}, scale: { angleLines: { display: true, color: 'rgb(21,23,25)' }, ticks: { callback: function() {return ''}, backdropColor: 'rgba(0, 0, 0, 0)' }, gridLines: { color: 'rgb(51,54,60)', } }, } }" % (machine["matrix"]["aggregate"], machine["matrix"]["maker"])
+            res = utils.get_http_res(url, requoteuri=True)
+            filename = "%s/matrix.png" % (self.config["destdirpath"])
+            with open(filename, "wb") as fp:
+              fp.write(res.content)
+            utils.info("created '%s/matrix.png' file for target '%s'" % (self.config["destdirpath"], self.config["destdirname"]))
+
     else:
       utils.warn("writeup file '%s' already exists for target '%s'" % (self.config["writeupyml"], self.config["destdirname"]))
 
