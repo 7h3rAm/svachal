@@ -20,7 +20,7 @@ writeup:
       - privesc_
   overview:
     description: |
-      This is a writeup for <infra> VM [`<name>`](). Here's an overview of the `enumeration` → `exploitation` → `privilege escalation` process:
+      This is a writeup for <infra> VM [<name>](). Here's an overview of the `enumeration` → `exploitation` → `privilege escalation` process:
     killchain:
       - "_ [<infra>] <name>/<ipaddr>":
         - ". a":
