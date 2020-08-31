@@ -26,7 +26,7 @@ header-includes:
 
 **Date**: {{ writeup.metadata.datetime|datetimefilter("%d/%b/%Y") }}  
 **Categories**: {{ writeup.metadata.categories|ghsearchlinks("https://github.com/7h3rAm/writeups") }}  
-**Tags**: {{ writeup.metadata.tags|anchorformat("https://github.com/7h3rAm/writeups") }}  
+**Tags**: {{ writeup.metadata.tags|ghsearchlinks("https://github.com/7h3rAm/writeups") }}  
 {% if writeup.metadata.infocard %}
 **InfoCard**:  
 ![writeup.metadata.infocard]({{ writeup.metadata.infocard }})
@@ -35,15 +35,20 @@ header-includes:
 ## Overview
 {% if writeup.overview %}
 {{ writeup.overview.description }}
-{% if writeup.overview.killchain %}
 
+### Killchain
+{% if writeup.overview.killchain %}
 ![writeup.overview.killchain](./killchain.png)
 {% endif %}
 
-{% else %}
-{{ writeup.summary.description }}
+{% if writeup.overview.ttps and writeup.overview.ttps|length %}
 
-![writeup.summary.overview](./graph.png)
+### TTPs
+{% for portmap in writeup.overview.ttps %}
+{{ loop.index }}\. `{{ portmap }}`: {{ writeup.overview.ttps[portmap].split(" ")|anchorformatttps("https://github.com/7h3rAm/writeups") }}  
+{% endfor %}
+
+{% endif %}
 {% endif %}
 
 \newpage

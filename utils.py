@@ -239,6 +239,21 @@ def anchorformat(items, repourl, delim=", "):
         results.append(ghsearchlinks(x, repourl))
     return delim.join(results)
 
+def anchorformatttps(items, repourl="https://github.com/7h3rAm/writeups", delim=", "):
+  if isinstance(items, str):
+    if items.startswith("enumerate_") or items.startswith("exploit_") or items.startswith("privesc_"):
+      return "[%s](%s#%s)" % (items, repourl, items)
+    else:
+      return ghsearchlinks(items, repourl)
+  else:
+    results = []
+    for x in items:
+      if x.startswith("enumerate_") or x.startswith("exploit_") or x.startswith("privesc_"):
+        results.append("[%s](%s#%s)" % (x, repourl, x))
+      else:
+        results.append(ghsearchlinks(x, repourl))
+    return delim.join(results)
+
 def mdurl(datadict):
   results = []
   for item in datadict:

@@ -63,6 +63,7 @@ class Svachal:
     env.filters["datetimefilter"] = utils.datetimefilter
     env.filters["ghsearchlinks"] = utils.ghsearchlinks
     env.filters["anchorformat"] = utils.anchorformat
+    env.filters["anchorformatttps"] = utils.anchorformatttps
     env.filters["mdurl"] = utils.mdurl
     env.filters["obfuscate"] = utils.obfuscate
     env.filters["monojoin"] = utils.monojoin
