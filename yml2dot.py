@@ -51,7 +51,7 @@ class YML2DOT:
       "colorborder": "#665957",
       "colorlink": "#85285d",
       "colorbg": "#ffffff",
-      "coloredge": "#665957",
+      "coloredge": "#005f87", #665957
       "colornode": "#FFFFFF",
       "colorwriteuproot": "",
     }
@@ -178,9 +178,9 @@ class YML2DOT:
     dotgraph = []
     dotgraph.append("digraph G {")
     dotgraph.append("  rankdir=LR;" if self.config["rankdirlr"] else "  #rankdir=LR;")
-    dotgraph.append("  nodesdictep=1.0; splines=\"line\"; K=0.6; overlap=scale; fixedsize=true; resolution=72; bgcolor=\"%s\"; outputorder=\"edgesfirst\";" % (self.config["colorbg"]))
+    dotgraph.append("  nodesdictep=1.0; splines=\"ortho\"; K=0.6; overlap=scale; fixedsize=true; resolution=72; bgcolor=\"%s\"; outputorder=\"edgesfirst\";" % (self.config["colorbg"]))
     dotgraph.append("  node [fontname=\"courier\" fontsize=%s shape=box width=0.25 fillcolor=\"white\" style=\"filled,solid\"];" % (self.config["fontsize"]))
-    dotgraph.append("  edge [style=dashed color=\"%s\" penwidth=0.75 arrowsize=0.6];" % (self.config["coloredge"]))
+    dotgraph.append("  edge [style=solid color=\"%s\" penwidth=0.75 arrowsize=0.75];" % (self.config["coloredge"]))
     dotgraph.append("")
     dotgraph.extend(["  %s" % (x) for x in self.nodes])
     dotgraph.append("")
