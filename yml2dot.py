@@ -51,7 +51,7 @@ class YML2DOT:
       "colorborder": "#665957",
       "colorlink": "#85285d",
       "colorbg": "#ffffff",
-      "coloredge": "#005f87", #665957
+      "coloredge": "#005f87",
       "colornode": "#FFFFFF",
       "colorwriteuproot": "",
     }
