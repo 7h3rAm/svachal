@@ -180,7 +180,7 @@ class YML2DOT:
     dotgraph.append("  rankdir=LR;" if self.config["rankdirlr"] else "  #rankdir=LR;")
     dotgraph.append("  nodesdictep=1.0; splines=\"ortho\"; K=0.6; overlap=scale; fixedsize=true; resolution=72; bgcolor=\"%s\"; outputorder=\"edgesfirst\";" % (self.config["colorbg"]))
     dotgraph.append("  node [fontname=\"courier\" fontsize=%s shape=box width=0.25 fillcolor=\"white\" style=\"filled,solid\"];" % (self.config["fontsize"]))
-    dotgraph.append("  edge [style=solid color=\"%s\" penwidth=0.75 arrowsize=0.75];" % (self.config["coloredge"]))
+    dotgraph.append("  edge [style=solid color=\"%s\" penwidth=0.75 arrowhead=vee arrowsize=0.75 ];" % (self.config["coloredge"]))
     dotgraph.append("")
     dotgraph.extend(["  %s" % (x) for x in self.nodes])
     dotgraph.append("")
