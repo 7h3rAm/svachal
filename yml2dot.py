@@ -10,6 +10,31 @@ import sys
 import re
 import os
 
+"""
+https://stackoverflow.design/product/base/colors/
+
+rgb(244, 248, 251) #f4f8fb
+rgb(225, 236, 244) #e1ecf4
+rgb(209, 229, 241) #d1e5f1
+rgb(0, 119, 204)   #0077cc
+rgb(91, 141, 177)  #5b8db1
+
+rgb(253, 247, 227) #fdf7e3
+rgb(251, 242, 212) #fbf2d4
+rgb(241, 229, 188) #f1e5bc
+rgb(206, 165, 27)  #cea51b
+
+rgb(238, 248, 241) #eef8f1
+rgb(220, 240, 226) #dcf0e2
+rgb(202, 232, 212) #cae8d4
+rgb(61, 143, 88)   #3d8f58
+
+rgb(253, 243, 244) #fdf3f4
+rgb(249, 211, 215) #f9d3d7
+rgb(244, 180, 187) #f4b4bb
+rgb(192, 45, 46)   #c02d2e 
+"""
+
 
 class YML2DOT:
   def __init__(self, rootnode="!@#$", fontsize="medium", addrootnode=True, rankdirlr=False, randomnodecolor=True, savehtml=False):
@@ -28,30 +53,30 @@ class YML2DOT:
 
       "cluster0": {
         "title": "",
-        "colornode": "#ffffff",
-        "colorborder": "navyblue",
+        "colornode": "#e1ecf4",
+        "colorborder": "#0077cc",
       },
       "cluster1": {
         "title": "Phase #1:Enumeration",
-        "colornode": "#cceabb",
-        "colorborder": "darkgreen",
+        "colornode": "#dcf0e2",
+        "colorborder": "#3d8f58",
       },
       "cluster2": {
         "title": "Phase #2:Exploitation",
-        "colornode": "#ffe0ac",
-        "colorborder": "darkorange",
+        "colornode": "#fbf2d4",
+        "colorborder": "#cea51b",
       },
       "cluster3": {
         "title": "Phase #3:Privilege Escalation",
-        "colornode": "#ffacb7",
-        "colorborder": "red",
+        "colornode": "#f9d3d7",
+        "colorborder": "#c02d2e",
       },
 
       "colorpallete": ["#cceabb", "#ffe0ac", "#ffacb7", "#b5cbcc", "#becddb", "#c2d6e1", "#c5d0cc", "#cddeef", "#dad4d5", "#dce1e4", "#dee9e7", "#dfdada", "#e3f2f7", "#ece1db", "#eff0ea", "#f3dbbe", "#fac3ac", "#ffcaaf"],
       "colorborder": "#665957",
       "colorlink": "#85285d",
       "colorbg": "#ffffff",
-      "coloredge": "#005f87",
+      "coloredge": "#665957",
       "colornode": "#FFFFFF",
       "colorwriteuproot": "",
     }
