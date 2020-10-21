@@ -72,7 +72,7 @@ class Svachal:
     rendermd = template.render(dictyml)
     destfilepath = "%s/%s" % (destdir, destfile)
     utils.file_save(destfilepath, rendermd)
-  
+
     if "summary.yml" not in ymlfile:
       if dictyml["writeup"].get("overview") and dictyml["writeup"]["overview"]["killchain"]:
         try:
