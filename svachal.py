@@ -737,10 +737,10 @@ class Svachal:
             else:
               name = "[%s](%s)" % (machine["name"], writeuppdfurl)
         emptycols = [os, difficulty, owned, oscplike]
-        os = "" if os == "⚪" else '[`%s`](foo "%s")' % (os, machine["os"])
-        difficulty = "" if difficulty == "⚪" else '[`%s`](foo %s)' % (difficulty, '"%spts"' % (machine["points"]) if machine["points"] else "!= pts")
-        owned = "" if owned == "⚪" else '[`%s`](foo "%s")' % (owned, owned_tooltip)
-        oscplike = "" if oscplike == "⚪" else '[`%s`](foo "%s")' % (oscplike, oscplike_tooltip)
+        os = "" if os == "" else '[`%s`](foo "%s")' % (os, machine["os"])
+        difficulty = "" if difficulty == "" else '[`%s`](foo %s)' % (difficulty, '"%spts"' % (machine["points"]) if machine["points"] else "!= pts")
+        owned = "" if owned == "" else '[`%s`](foo "%s")' % (owned, owned_tooltip)
+        oscplike = "" if oscplike == "" else '[`%s`](foo "%s")' % (oscplike, oscplike_tooltip)
         rows.append("___".join(str(x) for x in [
           name,
           infra,
