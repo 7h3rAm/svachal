@@ -2,7 +2,7 @@
 
 [![License: CC BY-SA 4.0](https://raw.githubusercontent.com/7h3rAm/7h3rAm.github.io/master/static/files/ccbysa4.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
-This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a machine. Once the writeup is complete, the YAML writeup file can be used to render a `.md` and `.pdf` report alongwith stats and summary for all completed writeups. It works in conjuction with [machinescli](https://github.com/7h3rAm/machinescli) project, so all machine metadata is natively accessible during writeup process:
+This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a machine. Once the writeup is complete, the YAML writeup file can be used to render a `.md` and `.pdf` report alongwith stats and summary for all completed writeups. It works in conjuction with [machinescli](https://github.com/7h3rAm/machinescli) project, so all machine metadata is natively accessible:
 
 ## Usage
 ![Usage](svachal01.png)
@@ -19,10 +19,10 @@ This is an automation framework for machine writeups. It defines a YAML based wr
 
 1. Override default writeup directory and GitHub repo URL:
 ```console
-$ python3 ./svachal.py -w $HOME/<reponame> -g "https://github.com/<username>/<reponame>
+$ svachal -w $HOME/<reponame> -g "https://github.com/<username>/<reponame>
 ```
 
-## Summarized Writeups Graphs
+## Summarized Writeup Graphs
 
 ![Top writeup categories](top_categories.png)
 
