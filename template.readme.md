@@ -130,10 +130,10 @@
 ```
 {% endif %}  
 {% if summary.techniques.enumerate[item].writeups|length > 0 %}
-| # | Date | Name | Categories | Tags | Overview |
-|---|------|------|------------|------|----------|
+| # | Name | Infra | Killchain | TTPs |
+|---|------|-------|-----------|------|
 {% for entry in summary.techniques.enumerate[item].writeups|sort(attribute="datetime", reverse=True) %}
-| {{ loop.index }}. | {{ entry.datetime|datetimefilter("%d/%b/%Y") }} | [{{ entry.name }}]({{ entry.writeup }}) | {{ entry.categories }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} | {{ entry.overview }} |
+| {{ loop.index }}. | [{{ entry.name }}]({{ entry.writeup }}) | [{{ entry.verbose_id }}]({{ entry.url }}) | {{ entry.overview }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} |
 {% endfor %}  
 {% endif %}
 {% for reference in summary.techniques.enumerate[item].references %}
@@ -159,10 +159,10 @@
 ```
 {% endif %}  
 {% if summary.techniques.exploit[item].writeups|length > 0 %}
-| # | Date | Name | Categories | Tags | Overview |
-|---|------|------|------------|------|----------|
+| # | Name | Infra | Killchain | TTPs |
+|---|------|-------|-----------|------|
 {% for entry in summary.techniques.exploit[item].writeups|sort(attribute="datetime", reverse=True) %}
-| {{ loop.index }}. | {{ entry.datetime|datetimefilter("%d/%b/%Y") }} | [{{ entry.name }}]({{ entry.writeup }}) | {{ entry.categories }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} | {{ entry.overview }} |
+| {{ loop.index }}. | [{{ entry.name }}]({{ entry.writeup }}) | [{{ entry.verbose_id }}]({{ entry.url }}) | {{ entry.overview }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} |
 {% endfor %}  
 {% endif %}
 {% for reference in summary.techniques.exploit[item].references %}
@@ -188,10 +188,10 @@
 ```
 {% endif %}  
 {% if summary.techniques.privesc[item].writeups|length > 0 %}
-| # | Date | Name | Categories | Tags | Overview |
-|---|------|------|------------|------|----------|
+| # | Name | Infra | Killchain | TTPs |
+|---|------|-------|-----------|------|
 {% for entry in summary.techniques.privesc[item].writeups|sort(attribute="datetime", reverse=True) %}
-| {{ loop.index }}. | {{ entry.datetime|datetimefilter("%d/%b/%Y") }} | [{{ entry.name }}]({{ entry.writeup }}) | {{ entry.categories }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} | {{ entry.overview }} |
+| {{ loop.index }}. | [{{ entry.name }}]({{ entry.writeup }}) | [{{ entry.verbose_id }}]({{ entry.url }}) | {{ entry.overview }} | {{ entry.tags|anchorformat("https://github.com/7h3rAm/writeups") }} |
 {% endfor %}  
 {% endif %}
 {% for reference in summary.techniques.privesc[item].references %}

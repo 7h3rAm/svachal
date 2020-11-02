@@ -449,6 +449,7 @@ class Svachal:
             "points": dictyml["writeup"]["metadata"]["points"] if dictyml["writeup"]["metadata"].get("points") else None,
             "tags": dictyml["writeup"]["metadata"]["tags"],
             "writeup": writeuppdfurl,
+            "verbose_id": dictyml["writeup"]["machine"]["verbose_id"].replace("hackthebox", "htb").replace("vulnhub", "vh"),
             "overview": '<img src="%s" width="100" height="100" />' % (killchainurl),
           })
         if tag.startswith("exploit_"):
@@ -464,6 +465,7 @@ class Svachal:
             "infra": dictyml["writeup"]["metadata"]["infra"],
             "points": dictyml["writeup"]["metadata"]["points"] if dictyml["writeup"]["metadata"].get("points") else None,
             "tags": dictyml["writeup"]["metadata"]["tags"],
+            "verbose_id": dictyml["writeup"]["machine"]["verbose_id"].replace("hackthebox", "htb").replace("vulnhub", "vh"),
             "writeup": writeuppdfurl,
             "overview": '<img src="%s" width="100" height="100" />' % (killchainurl if dictyml["writeup"].get("overview") else killchainurl),
           })
@@ -480,6 +482,7 @@ class Svachal:
             "infra": dictyml["writeup"]["metadata"]["infra"],
             "points": dictyml["writeup"]["metadata"]["points"] if dictyml["writeup"]["metadata"].get("points") else None,
             "tags": dictyml["writeup"]["metadata"]["tags"],
+            "verbose_id": dictyml["writeup"]["machine"]["verbose_id"].replace("hackthebox", "htb").replace("vulnhub", "vh"),
             "writeup": writeuppdfurl,
             "overview": '<img src="%s" width="100" height="100" />' % (killchainurl if dictyml["writeup"].get("overview") else killchainurl),
           })
