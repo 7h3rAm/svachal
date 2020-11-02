@@ -703,7 +703,7 @@ class Svachal:
     return utils.get_table(header, rows, delim="___", markdown=True, colalign="center")
 
   def stats_owned(self, machines):
-    header, rows = ["#", "Name", "Infra", "Killchain", "TTPs", "OS", "Points", "Owned", "OSCPlike"], []
+    header, rows = ["#", "Name", "Infra", "Killchain", "TTPs"], []
     for machine in machines:
       if machine["owned_user"] or machine["owned_root"]:
         os = utils.to_emoji(machine["os"])
@@ -746,10 +746,10 @@ class Svachal:
           infra,
           killchainurl,
           utils.anchorformat(tags, self.config["githubrepourl"]),
-          os,
-          difficulty,
-          owned,
-          oscplike,
+          #os,
+          #difficulty,
+          #owned,
+          #oscplike,
         ]))
     return(utils.get_table(header, ["%d.___%s" % (idx+1, x) for idx, x in enumerate(sorted(rows, key=str.casefold))], delim="___", markdown=True, colalign="center"))
 
