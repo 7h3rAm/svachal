@@ -38,3 +38,5 @@ Source the `.bash-completion` file within a shell to trigger auto-complete for a
 ```console
 alias svachal='python3 $HOME/svachal/svachal.py'
 ```
+
+> You will need a [Nerd Fonts patched font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts) for OS icons and other symbols to be rendered correctly.
