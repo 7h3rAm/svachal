@@ -14,3 +14,5 @@ querying and analysis for writeup ymls
   machinescli --query '.machines[]|select(.points == 50 and .os == "Windows")'
   machinescli --query '.machines[]|select(.points == 50 and .os != "Windows")'
   machinescli --query '.machines[]|select(.points == 20 and .os != "Windows")'
+
+add ttps/tags to machines.json

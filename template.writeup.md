@@ -34,12 +34,14 @@ header-includes:
 
 ## Overview
 {% if writeup.overview %}
-{{ writeup.overview.description }}
+This is a writeup for {{ writeup.metadata.infra }} VM [{{ writeup.metadata.name }}]({{ writeup.metadata.url }}). Here are stats for this machine from [machinescli](https://github.com/7h3rAm/machinescli):
+
+![writeup.overview.machinescli](./machinescli.png)
 
 ### Killchain
-{% if writeup.overview.killchain %}
+Here's the killchain (`enumeration` → `exploitation` → `privilege escalation`) for this machine:
+
 ![writeup.overview.killchain](./killchain.png)
-{% endif %}
 
 {% if writeup.overview.ttps and writeup.overview.ttps|length %}
 

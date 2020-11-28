@@ -20,7 +20,8 @@ writeup:
       - privesc_
   overview:
     description: |
-      This is a writeup for <infra> VM [<name>](). Here's an overview of the `enumeration` → `exploitation` → `privilege escalation` process:
+      This is a writeup for <infra> VM [<name>]().
+
     killchain:
       - "_ [<infra>] <name>/<ipaddr>":
         - ". a":
@@ -32,9 +33,9 @@ writeup:
           Here's the Nmap scan result:
         command: |
       - description: |
-        command: |
+          Here's the summary of open ports and associated [AutoRecon](https://github.com/Tib3rius/AutoRecon) scan files:
         screenshot:
-          - ./screenshot00.png
+          - ./openports.png
       - description: |
         command: |
         screenshot:
