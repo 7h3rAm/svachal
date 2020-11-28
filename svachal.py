@@ -310,6 +310,7 @@ class Svachal:
       "counts": {
         "totalvh": 0,
         "totalhtb": 0,
+        "totalthm": 0,
         "totalnix": 0,
         "totalwindows": 0,
         "total": 0,
@@ -321,8 +322,10 @@ class Svachal:
         "percentwindows": 0.0,
         "writeupsvh": 0,
         "writeupshtb": 0,
+        "writeupsthm": 0,
         "percentvh": 0.0,
         "percenthtb": 0.0,
+        "percentthm": 0.0,
       },
       "loot": {
         "hashes": [],
@@ -406,22 +409,29 @@ class Svachal:
         private.append(dictyml)
         continue
 
-      if "vulnhub" in dictyml["writeup"]["metadata"]["categories"] and "linux" in dictyml["writeup"]["metadata"]["categories"]:
+      if ("vulnhub" in dictyml["writeup"]["metadata"]["categories"] or "vh" in dictyml["writeup"]["metadata"]["categories"]) and "linux" in dictyml["writeup"]["metadata"]["categories"]:
         self.summary["counts"]["writeupsvh"] += 1
         self.summary["counts"]["writeupsnix"] += 1
-      if "vulnhub" in dictyml["writeup"]["metadata"]["categories"] and "windows" in dictyml["writeup"]["metadata"]["categories"]:
+      if ("vulnhub" in dictyml["writeup"]["metadata"]["categories"] or "vh" in dictyml["writeup"]["metadata"]["categories"]) and "windows" in dictyml["writeup"]["metadata"]["categories"]:
         self.summary["counts"]["writeupsvh"] += 1
         self.summary["counts"]["writeupswindows"] += 1
-      if "htb" in dictyml["writeup"]["metadata"]["categories"] and "linux" in dictyml["writeup"]["metadata"]["categories"]:
+      if ("hackthebox" in dictyml["writeup"]["metadata"]["categories"] or "htb" in dictyml["writeup"]["metadata"]["categories"]) and "linux" in dictyml["writeup"]["metadata"]["categories"]:
         self.summary["counts"]["writeupshtb"] += 1
         self.summary["counts"]["writeupsnix"] += 1
-      if "htb" in dictyml["writeup"]["metadata"]["categories"] and "windows" in dictyml["writeup"]["metadata"]["categories"]:
+      if ("hackthebox" in dictyml["writeup"]["metadata"]["categories"] or "htb" in dictyml["writeup"]["metadata"]["categories"]) and "windows" in dictyml["writeup"]["metadata"]["categories"]:
         self.summary["counts"]["writeupshtb"] += 1
+        self.summary["counts"]["writeupswindows"] += 1
+      if ("tryhackme" in dictyml["writeup"]["metadata"]["categories"] or "thm" in dictyml["writeup"]["metadata"]["categories"]) and "linux" in dictyml["writeup"]["metadata"]["categories"]:
+        self.summary["counts"]["writeupsthm"] += 1
+        self.summary["counts"]["writeupsnix"] += 1
+      if ("tryhackme" in dictyml["writeup"]["metadata"]["categories"] or "thm" in dictyml["writeup"]["metadata"]["categories"]) and "windows" in dictyml["writeup"]["metadata"]["categories"]:
+        self.summary["counts"]["writeupsthm"] += 1
         self.summary["counts"]["writeupswindows"] += 1
       self.summary["counts"]["writeups"] = self.summary["counts"]["writeupsvh"] + self.summary["counts"]["writeupshtb"]
       self.summary["counts"]["percent"] = "%.2f" % ((self.summary["counts"]["writeups"] / self.summary["counts"]["totaloscplike"]) * 100)
       self.summary["counts"]["percentvh"] = "%.2f" % ((self.summary["counts"]["writeupsvh"] / self.summary["counts"]["vhoscplike"]) * 100)
       self.summary["counts"]["percenthtb"] = "%.2f" % ((self.summary["counts"]["writeupshtb"] / self.summary["counts"]["htboscplike"]) * 100)
+      self.summary["counts"]["percentthm"] = "%.2f" % ((self.summary["counts"]["writeupsthm"] / self.summary["counts"]["thmoscplike"]) * 100)
       self.summary["counts"]["percentnix"] = "%.2f" % ((self.summary["counts"]["writeupsnix"] / self.summary["counts"]["totalnix"]) * 100)
       self.summary["counts"]["percentwindows"] = "%.2f" % ((self.summary["counts"]["writeupswindows"] / self.summary["counts"]["totalwindows"]) * 100)
 
@@ -596,6 +606,28 @@ class Svachal:
         self.summary["loot"]["hashes"].extend([x for x in dictyml["writeup"]["loot"]["hashes"]])
       self.summary["loot"]["hashes"] = sorted(list(set(self.summary["loot"]["hashes"])), key=str.casefold)
 
+      # add writeup tags/ttps to machine entries in machines.json
+      ttpmachines = []
+      for machine in self.machinesstats["machines"]:
+        entry = machine
+        if entry["url"] == dictyml["writeup"]["metadata"]["url"]:
+          if not entry.get("writeups"):
+            entry["writeups"] = {}
+          entry["writeups"]["7h3rAm"] = {
+            "ttps": {
+              "enumerate": [],
+              "exploit": [],
+              "privesc": [],
+            }
+          }
+          for tag in dictyml["writeup"]["metadata"]["tags"]:
+            if tag.startswith("enumerate_"): entry["writeups"]["7h3rAm"]["ttps"]["enumerate"].append(tag)
+            if tag.startswith("exploit_"): entry["writeups"]["7h3rAm"]["ttps"]["exploit"].append(tag)
+            if tag.startswith("privesc_"): entry["writeups"]["7h3rAm"]["ttps"]["privesc"].append(tag)
+        ttpmachines.append(entry)
+      self.machinesstats["machines"] = ttpmachines
+      utils.save_json(self.machinesstats, self.config["machinesjson"])
+
     for ttp in self.summary["techniques"]["enumerate"]:
       if self.summary["techniques"]["enumerate"][ttp].get("ports"):
         for port in self.summary["techniques"]["enumerate"][ttp]["ports"]:
@@ -674,9 +706,10 @@ class Svachal:
     utils.info("updated %s/readme.md with new stats and metadata" % (self.config["writeupdir"]))
 
   def stats_counts(self):
-    header, rows = ["#", "HackTheBox", "VulnHub", "OSCPlike", "Owned"], []
+    header, rows = ["#", "TryHackMe", "HackTheBox", "VulnHub", "OSCPlike", "Owned"], []
     rows.append("___".join([x for x in [
       "%s" % ("Total"),
+      "`%s/%s (%s)`" % (self.summary["counts"]["ownedthm"], self.summary["counts"]["totalthm"], "%.2f%%" % (self.summary["counts"]["perthm"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedhtb"], self.summary["counts"]["totalhtb"], "%.2f%%" % (self.summary["counts"]["perhtb"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedvh"], self.summary["counts"]["totalvh"], "%.2f%%" % (self.summary["counts"]["pervh"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedoscplike"], self.summary["counts"]["totaloscplike"], "%.2f%%" % (self.summary["counts"]["peroscplike"])),
@@ -684,6 +717,7 @@ class Svachal:
     ]]))
     rows.append("___".join([str(x) for x in [
       "Windows",
+      "`%s/%s (%s)`" % (self.summary["counts"]["ownedthmwindows"], self.summary["counts"]["thmwindows"], "%.2f%%" % (self.summary["counts"]["perthmwindows"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedhtbwindows"], self.summary["counts"]["htbwindows"], "%.2f%%" % (self.summary["counts"]["perhtbwindows"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedvhwindows"], self.summary["counts"]["vhwindows"], "%.2f%%" % (self.summary["counts"]["pervhwindows"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedoscplikewindows"], self.summary["counts"]["oscplikewindows"], "%.2f%%" % (self.summary["counts"]["peroscplikewindows"])),
@@ -691,6 +725,7 @@ class Svachal:
     ]]))
     rows.append("___".join([str(x) for x in [
       "*nix",
+      "`%s/%s (%s)`" % (self.summary["counts"]["ownedthmnix"], self.summary["counts"]["thmnix"], "%.2f%%" % (self.summary["counts"]["perthmnix"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedhtbnix"], self.summary["counts"]["htbnix"], "%.2f%%" % (self.summary["counts"]["perhtbnix"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedvhnix"], self.summary["counts"]["vhnix"], "%.2f%%" % (self.summary["counts"]["pervhnix"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedoscplikenix"], self.summary["counts"]["oscplikenix"], "%.2f%%" % (self.summary["counts"]["peroscplikenix"])),
@@ -698,6 +733,7 @@ class Svachal:
     ]]))
     rows.append("___".join([str(x) for x in [
       "OSCPlike",
+      "`%s/%s (%s)`" % (self.summary["counts"]["ownedthmoscplike"], self.summary["counts"]["thmoscplike"], "%.2f%%" % (self.summary["counts"]["perthmoscplike"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedhtboscplike"], self.summary["counts"]["htboscplike"], "%.2f%%" % (self.summary["counts"]["perhtboscplike"])),
       "`%s/%s (%s)`" % (self.summary["counts"]["ownedvhoscplike"], self.summary["counts"]["vhoscplike"], "%.2f%%" % (self.summary["counts"]["pervhoscplike"])),
       "",
