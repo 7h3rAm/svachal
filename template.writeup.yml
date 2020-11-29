@@ -12,7 +12,7 @@ writeup:
       - 
     categories:
       - oscp
-      - vulnhub/htb/thm
+      - vulnhub/hackthebox/tryhackme
       - linux/windows/bsd
     tags:
       - enumerate_

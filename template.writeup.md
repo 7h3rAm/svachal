@@ -28,8 +28,6 @@ header-includes:
 **Categories**: {{ writeup.metadata.categories|ghsearchlinks("https://github.com/7h3rAm/writeups") }}  
 **Tags**: {{ writeup.metadata.tags|ghsearchlinks("https://github.com/7h3rAm/writeups") }}  
 {% if writeup.metadata.infocard %}
-**InfoCard**:  
-![writeup.metadata.infocard]({{ writeup.metadata.infocard }})
 {% endif %}
 
 ## Overview
