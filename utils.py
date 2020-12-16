@@ -33,7 +33,7 @@ def highlight(text, color="black", bold=False):
     colorcode = "\x1b[0;34m" if not bold else "\x1b[1;34m"
   elif color == "magenta":
     colorcode = "\x1b[0;35m" if not bold else "\x1b[1;35m"
-  elif color == "cyan":
+  elif color == "orange":
     colorcode = "\x1b[0;36m" if not bold else "\x1b[1;36m"
   else:
     colorcode = "\x1b[0;30m" if not bold else "\x1b[1;30m"
@@ -81,11 +81,11 @@ def magenta(text):
 def magenta_bold(text):
   return highlight(text, color="magenta", bold=True)
 
-def cyan(text):
-  return highlight(text, color="cyan", bold=False)
+def orange(text):
+  return highlight(text, color="orange", bold=False)
 
-def cyan_bold(text):
-  return highlight(text, color="cyan", bold=True)
+def orange_bold(text):
+  return highlight(text, color="orange", bold=True)
 
 def debug(text):
   print("%s %s" % (blue_bold("[*]"), text))
@@ -330,11 +330,11 @@ def to_emoji(text):
   elif "public" == text.lower():
     return green("")
   elif "oscplike" == text.lower():
-    return magenta("") # 
+    return magenta("")
   elif "access_root" == text.lower():
     return red("")
   elif "access_user" == text.lower():
-    return yellow("")
+    return orange("")
   elif "has_writeup" == text.lower():
     return yellow("")
   elif "android" in text.lower():
@@ -344,7 +344,7 @@ def to_emoji(text):
   elif "bsd" in text.lower():
     return red("")
   elif "linux" == text.lower():
-    return yellow_bold("")
+    return orange("")
   elif "solaris" in text.lower():
     return magenta_bold("")
   elif "unix" in text.lower():
@@ -356,13 +356,13 @@ def to_emoji(text):
   elif "difficulty_unknown" == text.lower():
     return ""
   elif "easy" == text.lower():
-    return cyan_bold("")
+    return green("")
   elif "medium" == text.lower():
-    return green_bold("")
+    return yellow("")
   elif "hard" == text.lower():
-    return yellow_bold("")
+    return orange("")
   elif "insane" == text.lower():
-    return red_bold("")
+    return red("")
   else:
     return ""
 
@@ -374,7 +374,7 @@ def to_markdown_table(pt):
   pt.junction_char = _junc
   return "\n".join(markdown)
 
-def get_table(header, rows, delim="___", aligndict=None, markdown=False, colalign=None):
+def get_table(header, rows, delim="___", aligndict=None, markdown=False, colalign=None, multiline=False):
   table = prettytable.PrettyTable()
   table.field_names = header
   table.align = "c"; table.valign = "m"
@@ -408,13 +408,16 @@ def get_table(header, rows, delim="___", aligndict=None, markdown=False, colalig
       table.align["OS"] = "c"
       table.align["OSCPlike"] = "c"
       table.align["Owned"] = "c"
+      table.align["Writeup"] = "c"
+      table.align["TTPs"] = "c"
     table.vertical_char = " "
     table.horizontal_char = "-"
     table.junction_char = " "
-    return table.get_string()
+    table.hrules = prettytable.ALL if multiline else prettytable.FRAME
+    return "\n%s\n" % (table.get_string())
 
-def to_table(header, rows, delim="___", aligndict=None, markdown=False):
-  print(get_table(header, rows, delim=delim, aligndict=aligndict, markdown=markdown))
+def to_table(header, rows, delim="___", aligndict=None, markdown=False, multiline=False):
+  print(get_table(header, rows, delim=delim, aligndict=aligndict, markdown=markdown, multiline=multiline))
 
 def to_json(data):
   print(json.dumps(data, indent=2, sort_keys=True))
@@ -439,7 +442,7 @@ def to_gsheet(data):
   for line in sorted(lines):
     print(line)
 
-def show_machines(data, sort_key="name", jsonify=False, gsheet=False):
+def show_machines(data, sort_key="name", jsonify=False, gsheet=False, showttps=False):
   if not len(data):
     return
   elif "success" in data:
@@ -450,118 +453,157 @@ def show_machines(data, sort_key="name", jsonify=False, gsheet=False):
     to_gsheet(data)
   else:
     rows = []
-    if "writeuppdfurl" in data[0]:
-      header = ["#", "ID", "Name", "Private", "Rating", "Difficulty", "OS", "OSCPlike", "Owned"]
+    if data[0].get("expires_at"):
+      header = ["#", "ID", "Name", "Expires", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup", "TTPs"] if showttps else ["#", "ID", "Name", "Expires", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup"]
       for idx, entry in enumerate(sorted(data, key=lambda k: k[sort_key].lower())):
         mid = "%s%s" % (blue("%s#" % (entry["verbose_id"].split("#")[0])), blue_bold("%s" % (entry["verbose_id"].split("#")[1])))
-        name = black_bold(entry["name"])
+        name = black_bold(trim(entry["name"], maxq=30))
         os = to_emoji(entry["os"])
         difficulty = entry["difficulty"] if entry.get("difficulty") and entry["difficulty"] else "difficulty_unknown"
         rating = to_color_difficulty(sparkify(entry["difficulty_ratings"])) if entry.get("difficulty_ratings") else ""
+        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
         if entry.get("owned_root") and entry["owned_root"]:
           owned = "access_root"
         elif entry.get("owned_user") and entry["owned_user"]:
           owned = "access_user"
         else:
           owned = "access_none"
-        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
-        private = to_emoji("private") if entry["private"] else to_emoji("public")
-        rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s" % (
-        idx+1,
-        mid,
-        name,
-        private,
-        rating,
-        to_emoji(difficulty),
-        os,
-        to_emoji(oscplike),
-        to_emoji(owned),
-      ))
-
-    elif "expires_at" in data[0]:
-      header = ["#", "ID", "Name", "Expires", "Rating", "Difficulty", "OS", "OSCPlike", "Owned"]
-      for idx, entry in enumerate(sorted(data, key=lambda k: k[sort_key].lower())):
-        mid = "%s%s" % (blue("%s#" % (entry["verbose_id"].split("#")[0])), blue_bold("%s" % (entry["verbose_id"].split("#")[1])))
-        name = black_bold(entry["name"])
-        os = to_emoji(entry["os"])
-        difficulty = entry["difficulty"] if entry.get("difficulty") and entry["difficulty"] else "difficulty_unknown"
-        rating = to_color_difficulty(sparkify(entry["difficulty_ratings"])) if entry.get("difficulty_ratings") else ""
-        if entry.get("owned_root") and entry["owned_root"]:
-          owned = "access_root"
-        elif entry.get("owned_user") and entry["owned_user"]:
-          owned = "access_user"
+        writeup = to_emoji("has_writeup") if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        ttps = "\n".join([
+          ",".join([green(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["enumerate"]]),
+          ",".join([yellow(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["exploit"]]),
+          ",".join([red(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["privesc"]])
+          ]).strip() if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        if showttps:
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            entry["expires_at"],
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+            ttps,
+          ))
         else:
-          owned = "access_none"
-        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
-        rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s" % (
-        idx+1,
-        mid,
-        name,
-        entry["expires_at"],
-        rating,
-        to_emoji(difficulty),
-        os,
-        to_emoji(oscplike),
-        to_emoji(owned),
-      ))
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            entry["expires_at"],
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+          ))
 
-    elif "search_url" in data[0]:
-      header = ["#", "ID", "Name", "Match", "Follow", "Rating", "Difficulty", "OS", "OSCPlike", "Owned"]
+    elif data[0].get("search_url"):
+      header = ["#", "ID", "Name", "Follow", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup", "TTPs"] if showttps else ["#", "ID", "Name", "Follow", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup"]
       for idx, entry in enumerate(sorted(data, key=lambda k: k[sort_key].lower())):
         mid = "%s%s" % (blue("%s#" % (entry["verbose_id"].split("#")[0])), blue_bold("%s" % (entry["verbose_id"].split("#")[1])))
-        name = black_bold(entry["name"])
+        name = black_bold(trim(entry["name"], maxq=30))
         match = trim(entry["search_text"].replace(" - ", " ").strip(), maxq=30) if entry.get("search_text") else ""
-        follow = blue(entry["search_url"])
+        if entry["search_url"].startswith("youtu.be/"):
+          follow = "%s %s" % (red(""), blue(entry["search_url"]))
+        else:
+          follow = blue(entry["search_url"])
         os = to_emoji(entry["os"])
         difficulty = entry["difficulty"] if entry.get("difficulty") and entry["difficulty"] else "difficulty_unknown"
         rating = to_color_difficulty(sparkify(entry["difficulty_ratings"])) if entry.get("difficulty_ratings") else ""
+        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
         if entry.get("owned_root") and entry["owned_root"]:
           owned = "access_root"
         elif entry.get("owned_user") and entry["owned_user"]:
           owned = "access_user"
         else:
           owned = "access_none"
-        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
-        rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
-        idx+1,
-        mid,
-        name,
-        match,
-        follow,
-        rating,
-        to_emoji(difficulty),
-        os,
-        to_emoji(oscplike),
-        to_emoji(owned),
-      ))
+        writeup = to_emoji("has_writeup") if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        ttps = "\n".join([
+          ",".join([green(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["enumerate"]]),
+          ",".join([yellow(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["exploit"]]),
+          ",".join([red(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["privesc"]])
+          ]).strip() if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        if showttps:
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            follow,
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+            ttps,
+          ))
+        else:
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            follow,
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+          ))
 
     else:
-      header = ["#", "ID", "Name", "Rating", "Difficulty", "OS", "OSCPlike", "Owned"]
+      header = ["#", "ID", "Name", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup", "TTPs"] if showttps else ["#", "ID", "Name", "Rating", "Difficulty", "OS", "OSCPlike", "Owned", "Writeup"]
       for idx, entry in enumerate(sorted(data, key=lambda k: k[sort_key].lower())):
         mid = "%s%s" % (blue("%s#" % (entry["verbose_id"].split("#")[0])), blue_bold("%s" % (entry["verbose_id"].split("#")[1])))
-        name = black_bold(entry["name"])
+        name = black_bold(trim(entry["name"], maxq=30))
         os = to_emoji(entry["os"])
         difficulty = entry["difficulty"] if entry.get("difficulty") and entry["difficulty"] else "difficulty_unknown"
         rating = to_color_difficulty(sparkify(entry["difficulty_ratings"])) if entry.get("difficulty_ratings") else ""
+        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
         if entry.get("owned_root") and entry["owned_root"]:
           owned = "access_root"
         elif entry.get("owned_user") and entry["owned_user"]:
           owned = "access_user"
         else:
           owned = "access_none"
-        oscplike = "oscplike" if entry.get("oscplike") and entry["oscplike"] else "notoscplike"
-        rows.append("%s.___%s___%s___%s___%s___%s___%s___%s" % (
-        idx+1,
-        mid,
-        name,
-        rating,
-        to_emoji(difficulty),
-        os,
-        to_emoji(oscplike),
-        to_emoji(owned),
-      ))
+        writeup = to_emoji("has_writeup") if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        ttps = "\n".join([
+          ",".join([green(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["enumerate"]]),
+          ",".join([yellow(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["exploit"]]),
+          ",".join([red(x) for x in entry["writeups"]["7h3rAm"]["ttps"]["privesc"]])
+          ]).strip() if entry.get("writeups") and entry["writeups"].get("7h3rAm") else ""
+        if showttps:
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+            ttps,
+          ))
+        else:
+          rows.append("%s.___%s___%s___%s___%s___%s___%s___%s___%s" % (
+            idx+1,
+            mid,
+            name,
+            rating,
+            to_emoji(difficulty),
+            os,
+            to_emoji(oscplike),
+            to_emoji(owned),
+            writeup,
+          ))
 
-    to_table(header=header, rows=rows, delim="___", aligndict=None, markdown=False)
+    to_table(header=header, rows=rows, delim="___", aligndict=None, markdown=False, multiline=False)
 
 def to_xkcd(plotdict, filename, title, rotate=True, trimlength=20):
   datadict = {}
