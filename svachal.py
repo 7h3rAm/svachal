@@ -172,7 +172,8 @@ class Svachal:
       writeupyml["writeup"]["metadata"]["name"] = "%s" % (stats["name"])
       writeupyml["writeup"]["metadata"]["points"] = stats["points"] if stats.get("points") and stats["points"] else None
       writeupyml["writeup"]["metadata"]["matrix"] = stats["matrix"] if stats.get("matrix") and stats["matrix"] else None
-      writeupyml["writeup"]["metadata"]["categories"].append(stats["os"].lower())
+      if stats["os"]:
+        writeupyml["writeup"]["metadata"]["categories"].append(stats["os"].lower())
       if stats["oscplike"]:
         writeupyml["writeup"]["metadata"]["categories"].append("oscp")
       if stats["infrastructure"] in ["htb", "hackthebox"]:
@@ -183,6 +184,10 @@ class Svachal:
         writeupyml["writeup"]["metadata"]["infra"] = "VulnHub"
         writeupyml["writeup"]["metadata"]["categories"].append("vulnhub")
         writeupyml["writeup"]["metadata"]["path"] = "vulnhub.%s" % (utils.cleanup_name(stats["shortname"]))
+      elif stats["infrastructure"] in ["thm", "tryhackme"]:
+        writeupyml["writeup"]["metadata"]["infra"] = "TryHackMe"
+        writeupyml["writeup"]["metadata"]["categories"].append("tryhackme")
+        writeupyml["writeup"]["metadata"]["path"] = "thm.%s" % (utils.cleanup_name(stats["shortname"]))
     return writeupyml["writeup"]["metadata"]
 
   def metadata2yml(self, metadata):
