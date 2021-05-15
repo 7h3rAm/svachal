@@ -10,7 +10,7 @@ import datetime
 import urllib.request
 
 import requests
-import sparkline
+import sparklines
 import prettytable
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt

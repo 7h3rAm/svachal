@@ -1,0 +1,8 @@
+markdown2
+pyyaml
+jinja2
+requests
+sparklines
+prettytable
+bs4
+matplotlib
