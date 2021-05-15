@@ -4,6 +4,44 @@
 
 This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a machine. Once the writeup is complete, the YAML writeup file can be used to render a `.md` and `.pdf` report alongwith stats and summary for all completed writeups. It works in conjuction with [machinescli](https://github.com/7h3rAm/machinescli) project, so all machine metadata is natively accessible:
 
+## Install
+
+You will need to configure machinescli before using svachal
+
+To get your HTB_API_KEY go to your username tab > Classic HTB > Settings > API Key
+
+```
+git clone https://github.com/7h3rAm/machinescli && machinescli
+
+python3 -m venv --copies venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+mkdir ~/toolbox/bootstrap
+
+export HTB_API_KEY=srr5V1J6khMzGBaOmYOi97ckmQOiFlWh5ePzTcGvPqbvdEftJjba7thQpjF8
+
+python3 machinescli.py --update
+
+cd ..
+```
+
+Clone svachal repository, setup virtual environment and install requirements
+
+```
+git clone https://github.com/7h3rAm/svachal && cd svachal
+
+python3 -m venv --copies venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python3 svachal.py -s https://www.hackthebox.eu/home/machines/profile/200
+```
+
 ## Usage
 ![Usage](svachal01.png)
 
