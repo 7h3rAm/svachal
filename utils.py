@@ -355,10 +355,16 @@ def to_emoji(text):
     return magenta("")
   elif "difficulty_unknown" == text.lower():
     return ""
-  elif "easy" == text.lower():
-    return cyan("")
-  elif "medium" == text.lower():
+  elif "startingpoint" == text.lower():
+    return white("")
+  elif "info" == text.lower():
+    return white("")
+  elif "warmpup" == text.lower():
     return green("")
+  elif "easy" == text.lower():
+    return green("")
+  elif "medium" == text.lower():
+    return yellow("")
   elif "hard" == text.lower():
     return yellow("")
   elif "insane" == text.lower():

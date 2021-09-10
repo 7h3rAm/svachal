@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import jq
 import os
 import sys
 import shutil
@@ -26,6 +27,7 @@ class Svachal:
     self.config["basedir"] = os.path.dirname(os.path.realpath(__file__))
 
     self.config["machinesjson"] = "%s/toolbox/bootstrap/machines.json" % (utils.expand_env(var="$HOME"))
+    self.machinesstats = utils.load_json(self.config["machinesjson"])
 
     self.config["metayml"] = "%s/meta.yml" % (self.config["writeupdir"])
     self.config["summaryyml"] = "%s/summary.yml" % (self.config["writeupdir"])
@@ -43,10 +45,14 @@ class Svachal:
       "VH": "VulnHub",
     }
 
-    self.machinesstats = utils.load_json(self.config["machinesjson"])
-
     self.y2d = yml2dot.YML2DOT(fontsize="large", addrootnode=False, rankdirlr=False, randomnodecolor=False, savehtml=False)
     self.summary = None
+
+  def _json_query(self, query):
+    try:
+      return jq.compile(query).input(self.machinesstats).all()
+    except:
+      return []
 
   def md2pdf(self, destdir, mdname, pdfname):
     results = subprocess.run(['pandoc', '%s/%s' % (destdir, mdname), '-o', '%s/%s' % (destdir, pdfname), '--from', 'markdown+yaml_metadata_block+raw_html', '--highlight-style', 'tango', '--pdf-engine=xelatex'], cwd=destdir, stdout=subprocess.PIPE).stdout.decode('utf-8')
@@ -371,43 +377,37 @@ class Svachal:
       killchainurl = "%s/blob/master/%s/killchain.png" % (self.config["githubrepourl"], dictyml["writeup"]["metadata"]["path"])
 
       dictyml["writeup"]["machine"] = {}
-      dictyml["writeup"]["machine"]["name"] = dictyml["writeup"]["metadata"]["name"]
-      dictyml["writeup"]["machine"]["url"] = dictyml["writeup"]["metadata"]["url"]
+      query = '.machines[] | select(.url == "%s")' % (dictyml["writeup"]["metadata"]["url"])
+      result = self._json_query(query)
+      if result and len(result) == 1:
+        machinestats = result[0]
+      else:
+        machinestats = {
+          "name": dictyml["writeup"]["metadata"]["name"],
+          "url": dictyml["writeup"]["metadata"]["url"],
+        }
+      dictyml["writeup"]["machine"] = machinestats
       dictyml["writeup"]["machine"]["writeupmdurl"] = writeupmdurl
       dictyml["writeup"]["machine"]["writeuppdfurl"] = writeuppdfurl
       dictyml["writeup"]["machine"]["killchainurl"] = killchainurl
-      dictyml["writeup"]["machine"]["ratingsurl"] = None
-      dictyml["writeup"]["machine"]["matrixurl"] = None
+      dictyml["writeup"]["machine"]["verbose_id"] = machinestats["verbose_id"] if "verbose_id" in machinestats else "%s#%s" % (dictyml["writeup"]["metadata"]["infra"].lower().strip(), dictyml["writeup"]["metadata"]["name"].replace(" ", "").lower().strip())
+      if "oscplike" in machinestats:
+        dictyml["writeup"]["machine"]["oscplike"] = machinestats["oscplike"]
+      elif "oscp" in dictyml["writeup"]["metadata"]["categories"]:
+        dictyml["writeup"]["machine"]["oscplike"] = True
+      else:
+        dictyml["writeup"]["machine"]["oscplike"] = False
+      dictyml["writeup"]["machine"]["os"] = machinestats["os"] if "os" in machinestats else None
       dictyml["writeup"]["machine"]["private"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "private" else False
-      dictyml["writeup"]["machine"]["verbose_id"] = "%s#%s" % (dictyml["writeup"]["metadata"]["infra"].lower().strip(), dictyml["writeup"]["metadata"]["name"].replace(" ", "").lower().strip())
-      dictyml["writeup"]["machine"]["oscplike"] = True
       dictyml["writeup"]["machine"]["owned_user"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "public" else False
       dictyml["writeup"]["machine"]["owned_root"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "public" else False
-      if "linux" in dictyml["writeup"]["metadata"]["categories"]:
-        dictyml["writeup"]["machine"]["os"] = "Linux"
-      elif "windows" in dictyml["writeup"]["metadata"]["categories"]:
-        dictyml["writeup"]["machine"]["os"] = "Windows"
-      elif "bsd" in dictyml["writeup"]["metadata"]["categories"]:
-        dictyml["writeup"]["machine"]["os"] = "BSD"
+      if dictyml["writeup"]["machine"].get("difficulty_ratings") and dictyml["writeup"]["machine"]["difficulty_ratings"]:
+        dictyml["writeup"]["machine"]["ratingsurl"] = "%s/blob/master/%s/ratings.png" % (self.config["githubrepourl"], dictyml["writeup"]["metadata"]["path"])
+        dictyml["writeup"]["machine"]["matrixurl"] = "%s/blob/master/%s/matrix.png" % (self.config["githubrepourl"], dictyml["writeup"]["metadata"]["path"])
       else:
-        dictyml["writeup"]["machine"]["os"] = "Unknown"
+        dictyml["writeup"]["machine"]["ratingsurl"] = None
+        dictyml["writeup"]["machine"]["matrixurl"] = None
 
-      tracked = False
-      for machine in self.machinesstats["machines"]:
-        if machine["url"] == dictyml["writeup"]["metadata"]["url"]:
-          dictyml["writeup"]["machine"] = machine
-          dictyml["writeup"]["machine"]["writeupmdurl"] = writeupmdurl
-          dictyml["writeup"]["machine"]["writeuppdfurl"] = writeuppdfurl
-          dictyml["writeup"]["machine"]["killchainurl"] = killchainurl
-          dictyml["writeup"]["machine"]["private"] = True if dictyml["writeup"]["metadata"]["status"].lower().strip() == "private" else False
-          if dictyml["writeup"]["machine"].get("difficulty_ratings") and dictyml["writeup"]["machine"]["difficulty_ratings"]:
-            dictyml["writeup"]["machine"]["ratingsurl"] = "%s/blob/master/%s/ratings.png" % (self.config["githubrepourl"], dictyml["writeup"]["metadata"]["path"])
-            dictyml["writeup"]["machine"]["matrixurl"] = "%s/blob/master/%s/matrix.png" % (self.config["githubrepourl"], dictyml["writeup"]["metadata"]["path"])
-          else:
-            dictyml["writeup"]["machine"]["ratingsurl"] = None
-            dictyml["writeup"]["machine"]["matrixurl"] = None
-          tracked = True
-          break
       machines.append(dictyml["writeup"]["machine"])
 
       if dictyml["writeup"]["metadata"]["status"].lower().strip() == "private":
