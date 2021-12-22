@@ -11,15 +11,17 @@ You will need to configure machinescli before using svachal
 To get your HTB_API_KEY go to your username tab > Classic HTB > Settings > API Key
 
 ```
-git clone https://github.com/7h3rAm/machinescli && machinescli
+mkdir -p Git/7h3rAm && cd Git/7h3rAm
 
 python3 -m venv --copies venv
 
 source venv/bin/activate
 
+git clone https://github.com/7h3rAm/machinescli && cd machinescli
+
 pip install -r requirements.txt
 
-mkdir ~/toolbox/bootstrap
+mkdir -p ~/toolbox/bootstrap
 
 export HTB_API_KEY=srr5V1J6khMzGBaOmYOi97ckmQOiFlWh5ePzTcGvPqbvdEftJjba7thQpjF8
 
@@ -32,10 +34,6 @@ Clone svachal repository, setup virtual environment and install requirements
 
 ```
 git clone https://github.com/7h3rAm/svachal && cd svachal
-
-python3 -m venv --copies venv
-
-source venv/bin/activate
 
 pip install -r requirements.txt
 
