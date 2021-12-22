@@ -2,7 +2,7 @@ markdown2
 pyyaml
 jinja2
 requests
-sparklines
+pysparklines
 prettytable
 bs4
 matplotlib
