@@ -6,7 +6,7 @@ This is an automation framework for machine writeups. It defines a YAML based wr
 
 ## Installation
 
-You will need to configure [`machinescli`](https://github.com/7h3rAm/machinescli) before using `svachal`.  Follow [installation](https://github.com/7h3rAm/machinescli#installtion) guide to create the shared `machines.json` file using `machinescli`:
+You will need to configure [`machinescli`](https://github.com/7h3rAm/machinescli) before using `svachal`.  Follow [installation](https://github.com/7h3rAm/machinescli#installation) guide to create the shared `machines.json` file using `machinescli`:
 
 Next, clone `svachal` repository and install requirements:
 
