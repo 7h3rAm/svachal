@@ -813,7 +813,7 @@ if __name__ == "__main__":
 
   if not args.writeupdir and not args.githubrepourl:
     svl = Svachal(
-      writeupdir="%s/toolbox/repos/writeups" % (utils.expand_env(var="$HOME")),
+      writeupdir="%s/toolbox/projects/writeups" % (utils.expand_env(var="$HOME")),
       githubrepourl="https://github.com/7h3rAm/writeups",
     )
   elif not args.writeupdir or not args.githubrepourl:
