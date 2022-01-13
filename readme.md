@@ -2,39 +2,24 @@
 
 [![License: CC BY-SA 4.0](https://raw.githubusercontent.com/7h3rAm/7h3rAm.github.io/master/static/files/ccbysa4.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
-This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a machine. Once the writeup is complete, the YAML writeup file can be used to render a `.md` and `.pdf` report alongwith stats and summary for all completed writeups. It works in conjuction with [machinescli](https://github.com/7h3rAm/machinescli) project, so all machine metadata is natively accessible:
+This is an automation framework for machine writeups. It defines a YAML based writeup template that can be used while working on a machine. Once the writeup is complete, the YAML writeup file can be used to render a `.md` and `.pdf` report along with stats and summary for all completed writeups. It works in conjunction with [machinescli](https://github.com/7h3rAm/machinescli) project, so all machine metadata is natively accessible:
 
-## Install
+## Installation
 
-You will need to configure [`machinescli`](https://github.com/7h3rAm/machinescli) before using `svachal`.  First, setup a `projects` directory to initialize a working virtualenv:
+You will need to configure [`machinescli`](https://github.com/7h3rAm/machinescli) before using `svachal`.  Follow [installation](https://github.com/7h3rAm/machinescli#installtion) guide to create the shared `machines.json` file using `machinescli`:
 
-```
-mkdir -pv $HOME/toolbox/projects && cd $HOME/toolbox/projects
-python3 -m venv --copies venv
-source venv/bin/activate
-```
-
-Next, get your HTBAPIKEY from [HackTheBox](https://www.hackthebox.com/home/settings), go to your username tab > Classic HTB > Settings > API Key. Then, follow the steps below and run `machinescli` to create the shared `machines.json` file:
-
-```
-$ cd $HOME/toolbox/projects
-$ git clone https://github.com/7h3rAm/machinescli && cd machinescli
-$ pip install -r requirements.txt
-$ mkdir -pv $HOME/toolbox/bootstrap
-$ export HTBAPIKEY=<APIKEYHERE>
-$ python3 machinescli.py --update
-```
-
-Next, clone `svachal` repository, setup virtual environment and install requirements:
+Next, clone `svachal` repository and install requirements:
 
 ```
 $ cd $HOME/toolbox/projects
 $ git clone https://github.com/7h3rAm/svachal && cd svachal
+$ python3 -m venv --copies venv
+$ source venv/bin/activate
 $ pip install -r requirements.txt
 $ python3 svachal.py -h
 ```
 
-`svachal` expects GitHub to be the primary portal for writeups storage and sharing. As such, it needs a repo URL for links within writeups to correctly point to right resources. Initialize `svachal` for first run by creating a writeups directory and run with `-w` and `-g` arguments:
+`svachal` expects GitHub to be the primary portal for writeups storage and sharing. As such, it needs a repo URL for links within writeup `yml`/`md`/`pdf` files to correctly point to right resources. Initialize `svachal` for first run by creating a writeups directory and run with `-w` and `-g` arguments:
 
 ```
 $ mkdir -pv $HOME/toolbox/projects/writeups && cd $HOME/toolbox/projects/writeups
@@ -102,7 +87,7 @@ $ svachal -w $HOME/<reponame> -g "https://github.com/<username>/<reponame>
 
 
 ## Argument Autocomplete
-Source the `.bash-completion` file within a shell to trigger auto-complete for arguments. This will require the following alias (change path as needed): 
+Source the `.bash-completion` file within a shell to trigger auto-complete for arguments. This will require the following alias:
 ```console
 alias svachal='python3 $HOME/toolbox/projects/svachal/svachal.py -w $HOME/toolbox/projects/writeups -g http://github.com/<USERNAME>/writeups'
 ```
